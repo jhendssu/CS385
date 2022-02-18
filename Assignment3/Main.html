@@ -7,11 +7,13 @@
 
     <script id="Cube-vertex-shader" type="x-shader/x-vertex">#version 300 es
         in vec4 aPosition;
-        
+
+        uniform mat4 R;
+
         void main()
         {
             gl_PointSize = 3.0;
-            gl_Position = aPosition;
+            gl_Position = R * aPosition;
         }
     </script>
 

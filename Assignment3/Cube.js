@@ -71,6 +71,12 @@ function Cube( gl, numSides, vertexShaderId, fragmentShaderId ) {
        */
     ];
 
+    this.uniforms = {
+        R : gl.getUniformLocation(this.program, "R")
+    };
+
+    this.R = mat4();
+
     this.indices = { count : indices.length };
 
     this.positions.buffer = gl.createBuffer();
@@ -86,6 +92,8 @@ function Cube( gl, numSides, vertexShaderId, fragmentShaderId ) {
 
     this.render = function () {
         gl.useProgram( this.program );
+
+        gl.uniformMatrix4fv(this.uniforms.R, false, flatten(this.R));
 
         gl.bindBuffer( gl.ARRAY_BUFFER, this.positions.buffer );
         gl.vertexAttribPointer( this.positions.attributeLoc, this.positions.numComponents,

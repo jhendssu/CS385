@@ -9,7 +9,11 @@ function init() {
     gl.clearDepth(1.0);
     gl.enable(gl.DEPTH_TEST);
 
-    cube = new Cube(gl, 19);
+    time = 0;
+    theta = 0;
+    dtheta = 1;
+
+    cube = new Cube(gl);
     render();
     requestAnimationFrame(render);
 }
@@ -17,7 +21,14 @@ function init() {
 
 function render() {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+    theta = time*dtheta;
+    time++;
+
+    cube.R = rotate(theta, [1, .5, .25]);
+
     cube.render();
+    requestAnimationFrame(render);
 }
 
 
