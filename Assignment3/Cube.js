@@ -1,8 +1,6 @@
 // Joseph Henderson - CS 385
 
-const DefaultNumSides = 8;
-
-function Cube( gl, numSides, vertexShaderId, fragmentShaderId ) {
+function Cube( gl, vertexShaderId, fragmentShaderId ) {
 
     // Initialize the shader pipeline for this object using either shader ids
     //   declared in the application's HTML header, or use the default names.
@@ -19,12 +17,9 @@ function Cube( gl, numSides, vertexShaderId, fragmentShaderId ) {
         return; 
     }
     
-    var n = numSides || DefaultNumSides; // Number of sides 
-
     this.positions = { numComponents : 3 };
         
     var positions = [
-
         -1.0, -1.0, -1.0,   // 0
         1.0, -1.0, -1.0,    // 1
         1.0, -1.0, 1.0,     // 2
@@ -72,10 +67,14 @@ function Cube( gl, numSides, vertexShaderId, fragmentShaderId ) {
     ];
 
     this.uniforms = {
-        R : gl.getUniformLocation(this.program, "R")
+        R : gl.getUniformLocation(this.program, "R"),
+        P : gl.getUniformLocation(this.program, "P"),
+        MV : gl.getUniformLocation(this.program, "MV")
     };
 
     this.R = mat4();
+    this.P = mat4();
+    this.MV = mat4();
 
     this.indices = { count : indices.length };
 
@@ -94,6 +93,8 @@ function Cube( gl, numSides, vertexShaderId, fragmentShaderId ) {
         gl.useProgram( this.program );
 
         gl.uniformMatrix4fv(this.uniforms.R, false, flatten(this.R));
+        gl.uniformMatrix4fv(this.uniforms.P, false, flatten(this.P));
+        gl.uniformMatrix4fv(this.uniforms.MV, false, flatten(this.MV));
 
         gl.bindBuffer( gl.ARRAY_BUFFER, this.positions.buffer );
         gl.vertexAttribPointer( this.positions.attributeLoc, this.positions.numComponents,

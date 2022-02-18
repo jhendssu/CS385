@@ -9,11 +9,13 @@
         in vec4 aPosition;
 
         uniform mat4 R;
+        uniform mat4 MV;
+        uniform mat4 P;
 
         void main()
         {
             gl_PointSize = 3.0;
-            gl_Position = R * aPosition;
+            gl_Position = P * MV * R * aPosition;
         }
     </script>
 
