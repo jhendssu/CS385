@@ -34,6 +34,7 @@ function Cube( gl, vertexShaderId, fragmentShaderId ) {
     for (let i = 0; i < positions.length; i++) {
         positions[i] *= .5;
     }
+    
 
     var indices = [
         1, 3, 0,

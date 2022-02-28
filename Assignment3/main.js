@@ -34,12 +34,12 @@ function render() {
 
     // Model View
     eye = vec3(1.0, 1.0, 1.0);
-    at = vec3(0.0, 0.5, 0.5);
+    at = vec3(0.0, 0.0, 0.0);
     up = vec3(0.0, 1.0, 0.0);
     cube.MV = lookAt(eye, at, up);
 
     // Perspective
-    cube.P = perspective(110, aspect, 1, 10)
+    cube.P = perspective(110, aspect, .1, 100)
 
     cube.render();
     requestAnimationFrame(render);
