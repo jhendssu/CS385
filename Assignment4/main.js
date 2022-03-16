@@ -10,30 +10,42 @@ function init() {
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     gl.enable(gl.DEPTH_TEST);
    
-    // Projection Transformation
-    fovy = 177.45
-    near = 1.0
-    far = 3901.0
-    aspect = canvas.clientWidth/canvas.clientHeight;
-    P = perspective(fovy, aspect, near, far)
-
     // Add your sphere creation and configuration code here
-    sun = new Sphere();
+    sun = new Sphere()
     sun.radius = 500;
     sun.color = vec4(1.0, 0.9, 0.0, 1.0);
-    sun.P = P
 
-    earth = new Sphere();
+    earth = new Sphere()
     earth.radius = 100;
     earth.distance = 1500;
     earth.color = vec4(0.0, 0.76, 1.0, 1.0)
-    earth.P = P;
 
-    moon = new Sphere();
+    moon = new Sphere()
     moon.radius = 50;
     moon.distance = 400;
     moon.color = vec4(.7, .7, .7, 1.0)
+
+    diameter = 2*(earth.distance + moon.distance + moon.radius);
+
+    // Projection Transformation
+    near = 10000;
+    far = near + diameter;
+
+    fovtheta = Math.asin( (diameter/2) / (near + (diameter/2)) );
+    fovy = 2*Math.asin(fovtheta)
+    fovy = fovy * (180/Math.PI) // convert to degreees
+
+    aspect = canvas.clientWidth/canvas.clientHeight;
+    P = perspective(fovy, aspect, near, far)
+
+    // Apply the projection transformation to all obejcts
+    sun.P = P;
+    earth.P = P;
     moon.P = P;
+
+    hoursPerDay = 24;
+    hoursPerYear = 365.25 * hoursPerDay;
+    time = 0
 
     render()
     requestAnimationFrame(render);
@@ -42,23 +54,42 @@ function init() {
 function render() {
 
     // Update your motion variables here
+    time += 1;
+    day = (time / hoursPerYear) * 360
+    hour = time % 360
 
     gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
     
     // Add your rendering sequence here
-    eye = vec3(1.0, 1.0, 1.0);
-    at = vec3(0.0, 0.0, 0.0);
-    up = vec3(0.0, 1.0, 0.0);
-    MV = lookAt(eye, at, up);
+    ms = new MatrixStack();
+    
+    // Simplest viewing transform
+    var V = translate(0.0, 0.0, -0.5*(near + far));
+    ms.load(V)
 
-    sun.MV = MV;
-    sun.render();
+    // It helps to treat the push and pop operations like braces and 
+    // indent the code following the push operation.
+    
+    ms.push();
+        ms.scale(sun.radius)
+        sun.MV = ms.current();
+        sun.render();
+    ms.pop()
 
-    earth.MV = MV;
-    earth.render();
-
-    moon.MV = MV;
-    moon.render()
+    ms.push();
+        ms.rotate(day, [0.0, 0.0, 1.0]);    // effects the moon
+        ms.translate(earth.distance, 0, 0)  // effects the moon
+        ms.rotate(hour, [0.0, 0.0, 1.0])
+        ms.push();
+            ms.scale(earth.radius);
+            earth.MV = ms.current()
+            earth.render()
+        ms.pop();
+        ms.translate(moon.distance, 0, 0);
+        ms.scale(moon.radius);
+        moon.MV = ms.current();
+        moon.render();
+    ms.pop()
 
     requestAnimationFrame(render);
 }
