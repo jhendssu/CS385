@@ -31,9 +31,9 @@ function init() {
     near = 10000;
     far = near + diameter;
 
-    fovtheta = Math.asin( (diameter/2) / (near + (diameter/2)) );
-    fovy = 2*Math.asin(fovtheta)
-    fovy = fovy * (180/Math.PI) // convert to degreees
+    theta = Math.asin( (diameter/2) / (near + (diameter/2)) );
+    fovy = 2*theta;
+    fovy = fovy * (180/Math.PI); // convert to degreees
 
     aspect = canvas.clientWidth/canvas.clientHeight;
     P = perspective(fovy, aspect, near, far)
@@ -67,9 +67,8 @@ function render() {
     var V = translate(0.0, 0.0, -0.5*(near + far));
     ms.load(V)
 
-    // It helps to treat the push and pop operations like braces and 
-    // indent the code following the push operation.
-    
+    // I've found it helps to treat the push and pop operations like
+    // braces and indent the code following the push operation.
     ms.push();
         ms.scale(sun.radius)
         sun.MV = ms.current();
@@ -77,8 +76,8 @@ function render() {
     ms.pop()
 
     ms.push();
-        ms.rotate(day, [0.0, 0.0, 1.0]);    // effects the moon
-        ms.translate(earth.distance, 0, 0)  // effects the moon
+        ms.rotate(day, [0.0, 0.0, 1.0]);    // affects the moon
+        ms.translate(earth.distance, 0, 0)  // affects the moon
         ms.rotate(hour, [0.0, 0.0, 1.0])
         ms.push();
             ms.scale(earth.radius);
