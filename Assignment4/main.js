@@ -23,8 +23,8 @@ function init() {
     moon = new Sphere()
     moon.radius = 50;
     moon.distance = 400;
-    moon.color = vec4(.7, .7, .7, 1.0)
-
+    moon.color = vec4(0.7, 0.7, 0.7, 1.0)
+    
     diameter = 2*(earth.distance + moon.distance + moon.radius);
 
     // Projection Transformation
@@ -45,7 +45,6 @@ function init() {
 
     hoursPerDay = 24;
     hoursPerYear = 365.25 * hoursPerDay;
-    time = 0
 
     render()
     requestAnimationFrame(render);
