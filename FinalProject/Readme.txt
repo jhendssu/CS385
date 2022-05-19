@@ -13,6 +13,9 @@ The program was built using the three.js framework.
 The google slides presentation can be found here:
 	https://docs.google.com/presentation/d/1uM9vBFGZeLzakVqJbdX_g7qCU0KjWbJTNBU-FOCvWhA/edit?usp=sharing
 
+A brief video demonstrating the program can be found here:
+	https://youtu.be/4_UVbS5UKPs
+
 Other sources include:
 The official three.js github repository by Ricardo Cabello
 	https://github.com/mrdoob/three.js/
